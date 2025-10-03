@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 4.0)
+project(ListaGenerica)
+
+set(CMAKE_CXX_STANDARD 20)
+
+add_executable(ListaGenerica main.cpp
+        BibliotecaGenerica.cpp
+        BibliotecaGenerica.h
+        ListaconEnteros.cpp
+        ListaconEnteros.h
+        ListaconRegistros.cpp
+        ListaconRegistros.h
+        enums.h
+)
