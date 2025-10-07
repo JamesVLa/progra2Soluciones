@@ -1,7 +1,6 @@
 #include "BibliotecaGenerica.h"
 #include "ListaconEnteros.h"
 #include "ListaconRegistros.h"
-
 using namespace std;
 int main(int argc, char** argv) {
     void *lista;
