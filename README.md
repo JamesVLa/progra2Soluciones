@@ -1,0 +1,11 @@
+# Evaluaciones para hacer
+1. **Lab 1**: Sobrecarga de operadores - Bibliotecas estáticas (Rony Cueva)
+2. **Lab 2**: Arreglos y punteros - Método por incrementos (Eric Huiza)
+3. **Lab 3**: Arreglos y punteros - Punteros genéricos (Rony Cueva)
+4. **Lab 4**: Arreglos y punteros - Listas genéricas (Andres Melgar)
+5. **Lab 5**: POO - Arreglo de Objetos (Erasmo Gomez)
+6. **Lab 6**: POO - Sobrecarga de operadores (Andres Melgar)
+7. **Lab 7**: POO - Herencia (Erasmo Gomez)
+8. **Lab 8**: POO - Listas ligadas - Polimorfismo (Miguel Guanira)
+9. **Lab 9**: POO - STL (Miguel Guanira)
+10. **Lab 10**: Java (Eric Huiza)

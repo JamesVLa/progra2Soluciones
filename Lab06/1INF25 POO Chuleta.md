@@ -174,7 +174,3 @@ qsort(usuarios, cantUsuarios, sizeof(Usuario), compararUsuarios);
 |Evitar duplicar código|Usa `setCadenaGeneric()` o `mi_strdup()`|
 |Liberar cadena|`libera_cadena(ptr);`|
 |Ordenar con qsort|`qsort(arr, n, sizeof(T), comparar);`|
-
----
-
-¿Quieres que te lo deje **listo para imprimir como chuleta en PDF o markdown** (una sola hoja limpia para repaso)?
