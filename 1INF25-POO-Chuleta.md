@@ -258,3 +258,266 @@ void RedSocial::cargarPublicaciones(const char* arch) {
     - `[]` (indexador)
     - `+=` (agregar elemento)
 - Implementar `qsort` si necesita ordenamiento
+
+# 🧾 **Chuleta Herencia C++**
+
+## 🔹 Definición básica
+
+```cpp
+class Derivada : public Base {
+    // nuevos atributos y métodos
+};
+```
+
+- **public:** hereda lo público y protegido como público/protegido.
+    
+- **protected:** hereda lo público y protegido como protegido.
+    
+- **private:** todo se vuelve privado en la derivada.
+    
+
+---
+
+## 🔸 Accesos en herencia
+
+|Miembro base|Herencia pública|Herencia protegida|Herencia privada|
+|---|---|---|---|
+|`public`|`public`|`protected`|`private`|
+|`protected`|`protected`|`protected`|`private`|
+|`private`|❌ no accesible|❌ no accesible|❌ no accesible|
+
+📘 _La derivada puede acceder a `protected`, pero no a `private`._
+
+---
+
+## 🧩 **Constructores y destructores**
+
+**Orden de construcción y destrucción:**
+
+🧠 Construcción: **Base → Derivada**  
+🧹 Destrucción: **Derivada → Base**
+
+---
+
+### 1️⃣ Constructor por defecto
+
+Si no lo declaras, la derivada **llama automáticamente** al **constructor por defecto** de la base.
+
+```cpp
+class Base {
+public:
+    Base() { cout << "Base()\n"; }
+};
+
+class Derivada : public Base {
+public:
+    Derivada() { cout << "Derivada()\n"; }
+};
+```
+
+🧾 Salida:
+
+```
+Base()
+Derivada()
+```
+
+---
+
+### 2️⃣ Constructor con parámetros
+
+Para inicializar la base con parámetros, se debe llamar **explícitamente**:
+
+```cpp
+Derivada(char* nombre, char* dni, int codigo, char* fac, int ciclo)
+    : Base(nombre, dni, codigo), facultad(nullptr), ciclo(0) {
+    setFacultad(fac);
+    this->ciclo = ciclo;
+}
+```
+
+Si **no llamas al constructor base con parámetros**, se usa su **constructor por defecto**, lo cual puede causar valores erróneos.
+
+---
+
+### 3️⃣ Constructor copia
+
+Hay dos formas válidas:
+
+**Forma A (recomendada, usa operador = para evitar duplicar código):**
+
+```cpp
+Derivada(const Derivada& orig)
+    : facultad(nullptr), ciclo(0) {
+    *this = orig;
+}
+```
+
+**Forma B (llamando constructor copia de base directamente):**
+
+```cpp
+Derivada(const Derivada& orig)
+    : Base(orig), facultad(nullptr), ciclo(0) {
+    setFacultad(orig.facultad);
+    ciclo = orig.ciclo;
+}
+```
+
+---
+
+## 🔁 **Operador = en herencia**
+
+Debe llamar al `operator=` de la base para copiar sus partes.
+
+```cpp
+Derivada& Derivada::operator=(const Derivada& orig) {
+    if (this == &orig) return *this;
+
+    Base::operator=(orig); // importante!
+    setFacultad(orig.facultad);
+    ciclo = orig.ciclo;
+
+    return *this;
+}
+```
+
+---
+
+## 💣 **Destructor**
+
+Siempre destructor **virtual** si la clase se usará con polimorfismo (aunque aún no lo estés usando).
+
+```cpp
+virtual ~Base();
+```
+
+Orden de destrucción:
+
+```
+~Derivada()
+~Base()
+```
+
+---
+
+## 🧱 **Ocultamiento y sobreescritura**
+
+- Si **no hay virtual**, el método de la derivada **oculta** el de la base.
+    
+- Puedes seguir accediendo al de la base con `Base::metodo()`.
+    
+
+```cpp
+void Derivada::imprimir() {
+    Base::imprimir();
+    cout << "Facultad: " << facultad << endl;
+}
+```
+
+---
+
+## 🧰 **Zona protegida (`protected`)**
+
+- Accesible **solo dentro de la clase y sus derivadas**.
+    
+- No accesible para objetos externos.
+    
+- Útil para heredar atributos sin exponerlos al público.
+    
+
+```cpp
+class Base {
+protected:
+    int edad;
+};
+class Derivada : public Base {
+    void mostrar() { cout << edad; }
+};
+```
+
+---
+
+## 🏗️ **Tipos de herencia**
+
+|Tipo|Descripción|
+|---|---|
+|**Simple**|Una clase hereda de una sola base.|
+|**Múltiple**|Hereda de varias bases. Ej: `class D : public A, public B {}`|
+|**Jerárquica**|Una clase base tiene varias derivadas.|
+|**Multinivel**|Derivada de derivada. Ej: `A → B → C`.|
+
+---
+
+## 💎 **Herencia múltiple y virtual**
+
+Evita duplicar la clase base cuando hay un “diamante”.
+
+```cpp
+class Persona { };
+class Alumno : virtual public Persona { };
+class Profesor : virtual public Persona { };
+class Ayudante : public Alumno, public Profesor { };
+```
+
+- 🔸 Sin `virtual`: 2 instancias de `Persona`.
+    
+- 🔹 Con `virtual`: solo **1 instancia compartida**.
+    
+- 🧠 El constructor de la **más derivada** (Ayudante) llama al de la base virtual.
+    
+
+---
+
+## ⚙️ **Buenas prácticas en herencia**
+
+✅ Usa **public** para relaciones “es-un”.  
+✅ Declara destructores virtuales en clases base con métodos virtuales.  
+✅ Inicializa la **base** siempre en la lista de inicialización.  
+✅ Usa `protected` con cuidado: puede romper el encapsulamiento.  
+✅ Evita la herencia múltiple si no es necesaria.  
+✅ Si ocultas métodos, acláralo con `using Base::metodo;` si quieres reexponerlos.
+
+---
+
+## ⚡ **Mini ejemplo completo**
+
+```cpp
+class Alumno {
+protected:
+    char* nombre;
+    char* dni;
+    int codigo;
+public:
+    Alumno(char* n = nullptr, char* d = nullptr, int c = 0);
+    Alumno(const Alumno&);
+    Alumno& operator=(const Alumno&);
+    virtual ~Alumno();
+    virtual void imprimir() const;
+};
+
+class AlumnoUniversitario : public Alumno {
+    char* facultad;
+    int ciclo;
+public:
+    AlumnoUniversitario(char*, char*, int, char*, int);
+    AlumnoUniversitario(const AlumnoUniversitario&);
+    AlumnoUniversitario& operator=(const AlumnoUniversitario&);
+    void imprimir() const override;
+    ~AlumnoUniversitario();
+};
+```
+
+---
+
+## 🧠 **Resumen ultra corto**
+
+|Concepto|Clave|
+|---|---|
+|Orden construcción|Base → Derivada|
+|Orden destrucción|Derivada → Base|
+|Herencia pública|Mantiene visibilidad|
+|Constructor copia|Llama a base o usa `=`|
+|Destructor|Debe ser virtual si hay polimorfismo|
+|Ocultamiento|`Base::metodo()` para acceder|
+|Protected|Acceso solo derivadas|
+|Virtual base|Evita duplicar en herencia múltiple|
