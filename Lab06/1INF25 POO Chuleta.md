@@ -173,4 +173,8 @@ qsort(usuarios, cantUsuarios, sizeof(Usuario), compararUsuarios);
 |delete seguro|`delete[] nullptr;` ✅|
 |Evitar duplicar código|Usa `setCadenaGeneric()` o `mi_strdup()`|
 |Liberar cadena|`libera_cadena(ptr);`|
+<<<<<<< HEAD
 |Ordenar con qsort|`qsort(arr, n, sizeof(T), comparar);`|
+=======
+|Ordenar con qsort|`qsort(arr, n, sizeof(T), comparar);`|
+>>>>>>> 3a9e1162c0909ede3c46bf14e8ef7a742ff383a9
