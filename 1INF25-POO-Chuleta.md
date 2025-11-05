@@ -160,6 +160,68 @@ qsort(usuarios, cantUsuarios, sizeof(Usuario), compararUsuarios);
 ```
 
 ---
+## 🔢 Sobrecarga operator[] (indexador)
+
+### En el `.h`
+
+```cpp
+Usuario& operator[](int);
+const Usuario& operator[](int) const;
+
+Usuario& operator[](const char*);
+const Usuario& operator[](const char*) const;
+
+Usuario& at(int);
+const Usuario& at(int) const;
+```
+
+### En el `.cpp`
+
+```cpp
+Usuario& RedSocial::operator[](int i) {
+    if (i < 0 || i >= cantUsuarios) exit(1);
+    return usuarios[i];
+}
+
+Usuario& RedSocial::operator[](const char* cuenta) {
+    for (int i = 0; i < cantUsuarios; i++)
+        if (strcmp(usuarios[i].getCuenta(), cuenta) == 0)
+            return usuarios[i];
+    cerr << "No existe la cuenta: " << cuenta << endl;
+    exit(1);
+}
+
+Usuario& RedSocial::at(int i) {
+    if (i < 0 || i >= cantUsuarios) exit(1);
+    return (*this)[i];
+}
+```
+
+### Ejemplo de uso
+
+```cpp
+Usuario u = redSocial[3];
+Usuario x = redSocial.at(3);
+Usuario& ref = (*this)["juan23"]; // ¡IMPORTANTE!
+```
+
+> `(*this)[cuenta]` → el paréntesis es necesario porque `this` es puntero; sin él harías aritmética de punteros (`this[cuenta]` ❌).
+
+### Ejemplo real (profesor)
+
+```cpp
+void RedSocial::cargarPublicaciones(const char* arch) {
+    Publicacion p;
+    ifstream f(arch, ios::in);
+    while (f >> p) {
+        const char* cuenta = p.getCuenta();
+        Usuario& u = (*this)[cuenta];
+        u += p;
+    }
+}
+```
+
+---
 
 ## 💡 Recordatorios rápidos
 
@@ -173,8 +235,26 @@ qsort(usuarios, cantUsuarios, sizeof(Usuario), compararUsuarios);
 |delete seguro|`delete[] nullptr;` ✅|
 |Evitar duplicar código|Usa `setCadenaGeneric()` o `mi_strdup()`|
 |Liberar cadena|`libera_cadena(ptr);`|
-<<<<<<< HEAD
 |Ordenar con qsort|`qsort(arr, n, sizeof(T), comparar);`|
-=======
-|Ordenar con qsort|`qsort(arr, n, sizeof(T), comparar);`|
->>>>>>> 3a9e1162c0909ede3c46bf14e8ef7a742ff383a9
+
+## 🧰 Tipos de clases
+
+- **Entidad:** datos (`Usuario`, `Curso`, `Publicacion`).
+- **Controladora:** agrupa/gestiona (`RedSocial`).
+- **Servicio/Helper:** auxiliares (`Registro`, `Archivo`).
+
+---
+
+## 📋 Requisitos mínimos de clase completa
+
+- Constructor por defecto
+- Constructor de copia
+- Destructor
+- Setters / Getters
+- Sobrecarga de:
+    - `=` (asignación)
+    - `>>` (lectura)
+    - `<<` (escritura)
+    - `[]` (indexador)
+    - `+=` (agregar elemento)
+- Implementar `qsort` si necesita ordenamiento
