@@ -20,6 +20,7 @@ void Arbol::lee(ifstream &arch) {
 
     char tipo[100];
     arch.getline(tipo, 100,',');
+    if (arch.eof())return;
     if (strcmp(tipo, "Velocidad")==0) {
         aux=new DroneVelocidad();
     }else if (strcmp(tipo, "Semaforo")==0) {
