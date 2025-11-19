@@ -5,7 +5,7 @@
 #include "Comunes.h"
 
 void liberarCadena(char* &cadena) {
-    if (!cadena) {
+    if (cadena) {
         delete[] cadena;
         cadena = nullptr;
     }
