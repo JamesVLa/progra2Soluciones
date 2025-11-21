@@ -1,3 +1,6 @@
+PRACTICAR EL LAB2 PERO CON JAVA
+
+
 import os
 
 # Lista de carpetas
